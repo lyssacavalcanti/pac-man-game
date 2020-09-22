@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         squares [pacmanCurrentIndex].classList.add('pac-man')
     
         pacDotEaten()
+        powerPelletEaten()
     }
 
     document.addEventListener('keyup', movePacman)
@@ -101,6 +102,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function powerPelletEaten() {
+        if(squares[pacmanCurrentIndex].classList.contains('power-pellet')) {
+            score +=10
+            ghosts.forEach(ghost => ghost.isScared = true)
+            setTimeout(unScareGhosts, 10000)
+            squares [pacmanCurrentIndex].classList.remove('power-pellet')
+        }
+    }
+
+    function unScareGhosts() {
+        ghosts.forEach(ghost => ghost.isScared = false)
+    }
+
     class Ghost {
         constructor(className, startIndex, speed) {
             this.className = className
@@ -108,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.speed = speed
             this.currentIndex = startIndex
             this.timerId = NaN
+            this.isScared = false
         }
     }
 
@@ -123,5 +138,31 @@ document.addEventListener('DOMContentLoaded', () => {
         squares[ghost.currentIndex].classList.add('ghost')
     })
 
+    ghosts.forEach(ghost => moveGhost (ghost))
+
+    function moveGhost(ghost) {
+        const directions = [-1, +1, width, -width]
+        let direction = directions[Math.floor(Math.random() * directions.length)]
+
+        ghost.timerId = setInterval(function() {
+            if(!squares[ghost.currentIndex + direction].classList.contains('wall') && !squares[ghost.currentIndex + direction].classList.contains('ghost')){
+                squares[ghost.currentIndex].classList.remove(ghost.className, 'ghost', 'scared-ghost')
+                ghost.currentIndex+=direction
+                squares[ghost.currentIndex].classList.add(ghost.className, 'ghost')
+            } else direction = directions[Math.floor(Math.random() * directions.length)]
+
+            if (ghost.isScared) {
+                squares[ghost.currentIndex].classList.add('scared-ghost')
+            }
+
+            if(ghost.isScared && square [ghost.currentIndex].classList.contains('pac-man')) {
+                squares [ ghost.currentIndex].classList.remove(ghost.className, 'ghost', 'scared-ghost')
+                ghost.currentIndex = ghost.startIndex
+                score +=100
+                squares[ghost.currentIndex].classList.add(ghost.className,'ghost')
+            }
+
+        }, ghost.speed)
+    }
 
 })
