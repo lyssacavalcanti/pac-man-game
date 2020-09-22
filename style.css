@@ -26,6 +26,34 @@
     border-radius: 10px;
 } 
 
+
+.blinky {
+    background-color: red;
+    border: 0px;
+}
+
+.pinky {
+    background-color: pink;
+    border: 0px;
+}
+
+.inky {
+    background-color: cyan;
+    border: 0px;
+}
+
+.clyde {
+    background-color: orange;
+    border: 0px;
+}
+
+.scared-ghost {
+    background-color: aquamarine;
+    border: 0px;
+}
+
+
+
 .pac-man {
     background-color: yellow;
     border-radius: 10px;
